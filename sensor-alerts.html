@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sensor Alerts</title>
+</head>
+<body>
+
+    <h2>Critical Sensor Alerts</h2>
+    <div id="alerts"></div>
+
+    <script>
+        const sensors = [
+            { name: "Temperature", value: 85, limit: 70 },
+            { name: "Humidity", value: 45, limit: 60 },
+            { name: "Pressure", value: 110, limit: 100 },
+            { name: "Voltage", value: 250, limit: 240 }
+        ];
+
+        function processSensors(data) {
+
+            // Filter sensors exceeding their limits
+            const alerts = data.filter(
+                sensor => sensor.value > sensor.limit
+            );
+
+            // Convert alerts into HTML table rows
+            const rows = alerts.map(sensor => `
+                <tr>
+                    <td>${sensor.name}</td>
+                    <td>${sensor.value}</td>
+                    <td>${sensor.limit}</td>
+                    <td>Critical</td>
+                </tr>
+            `).join("");
+
+            // Count total critical alerts
+            const total = alerts.reduce(
+                (count, sensor) => count + 1, 0
+            );
+
+            // Display the formatted table
+            document.getElementById("alerts").innerHTML = `
+                <p>Total Critical Alerts: ${total}</p>
+                <table border="1" cellpadding="8">
+                    <tr>
+                        <th>Sensor</th>
+                        <th>Current Value</th>
+                        <th>Threshold</th>
+                        <th>Status</th>
+                    </tr>
+                    ${rows || "<tr><td colspan='4'>No alerts</td></tr>"}
+                </table>
+            `;
+        }
+
+        processSensors(sensors);
+    </script>
+
+</body>
+</html>
