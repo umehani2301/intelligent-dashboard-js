@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Intelligent Node Dashboard</title>
+    <style>
+        .warning {
+            border: 2px solid orange;
+            background-color: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="dashboard">
+        <div class="node" data-status="online">Node 1: Online</div>
+        <div class="node" data-status="offline">Node 2: Offline</div>
+        <section>
+            <div class="node" data-status="offline">
+                Node 3: Offline
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const dashboard = document.getElementById("dashboard");
+
+        // NodeIterator scans all element nodes
+        const iterator = document.createNodeIterator(
+            dashboard,
+            NodeFilter.SHOW_ELEMENT
+        );
+
+        let node;
+
+        while (node = iterator.nextNode()) {
+            if (node.dataset.status === "offline") {
+                node.classList.add("warning");
+                node.style.border = "2px solid orange";
+                node.style.backgroundColor = "#fff3cd";
+                node.style.color = "#856404";
+                node.textContent += " [WARNING]";
+            }
+        }
+
+        // TreeWalker scans nodes using a filter
+        const walker = document.createTreeWalker(
+            dashboard,
+            NodeFilter.SHOW_ELEMENT,
+            {
+                acceptNode: function(node) {
+                    return node.dataset.status === "offline"
+                        ? NodeFilter.FILTER_ACCEPT
+                        : NodeFilter.FILTER_SKIP;
+                }
+            }
+        );
+
+        while (walker.nextNode()) {
+            console.log("Offline node found:", walker.currentNode);
+        }
+    </script>
+
+</body>
+</html>

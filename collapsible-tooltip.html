@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Collapsible Section and Tooltip</title>
+</head>
+<body>
+
+<div id="container"></div>
+
+<script>
+    // Create main section
+    const container = document.getElementById("container");
+
+    const section = document.createElement("div");
+    const button = document.createElement("button");
+    const content = document.createElement("div");
+
+    button.textContent = "Toggle Details";
+    content.textContent = "This is the collapsible content.";
+    content.style.padding = "10px";
+    content.style.display = "none";
+
+    // Add elements to DOM
+    section.appendChild(button);
+    section.appendChild(content);
+    container.appendChild(section);
+
+    // Collapsible functionality
+    button.addEventListener("click", function() {
+        content.style.display =
+            content.style.display === "none" ? "block" : "none";
+    });
+
+    // Create tooltip
+    const tooltip = document.createElement("div");
+    tooltip.textContent = "Additional Information";
+
+    tooltip.style.position = "fixed";
+    tooltip.style.display = "none";
+    tooltip.style.background = "black";
+    tooltip.style.color = "white";
+    tooltip.style.padding = "6px";
+    tooltip.style.borderRadius = "4px";
+    tooltip.style.zIndex = "1000";
+    tooltip.style.pointerEvents = "none";
+
+    // Insert tooltip before the section
+    container.insertBefore(tooltip, section);
+
+    // Show and reposition tooltip
+    button.addEventListener("mousemove", function(event) {
+        tooltip.style.display = "block";
+
+        const offset = 12;
+        const width = tooltip.offsetWidth;
+        const height = tooltip.offsetHeight;
+
+        let x = event.clientX + offset;
+        let y = event.clientY + offset;
+
+        // Keep tooltip inside viewport
+        if (x + width > window.innerWidth) {
+            x = event.clientX - width - offset;
+        }
+
+        if (y + height > window.innerHeight) {
+            y = event.clientY - height - offset;
+        }
+
+        tooltip.style.left = Math.max(0, x) + "px";
+        tooltip.style.top = Math.max(0, y) + "px";
+    });
+
+    button.addEventListener("mouseleave", function() {
+        tooltip.style.display = "none";
+    });
+</script>
+
+</body>
+</html>

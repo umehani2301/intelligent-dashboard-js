@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Interactive Chart</title>
+</head>
+<body>
+
+<div id="chart" style="padding:30px; background:#ddd;">
+    <div class="bar" data-value="80"
+         style="padding:20px; background:skyblue;">
+        Bar 1
+        <button data-value="80">View Data</button>
+    </div>
+</div>
+
+<script>
+    const chart = document.getElementById("chart");
+
+    // Capturing phase: event travels from parent to target
+    chart.addEventListener("click", function(event) {
+        console.log("Capturing phase");
+    }, true);
+
+    // Bubbling phase: event travels from target to parent
+    chart.addEventListener("click", function(event) {
+        event.preventDefault();
+
+        const target = event.target;
+        const bar = target.closest(".bar");
+
+        if (bar && chart.contains(bar)) {
+            console.log("Target:", target.tagName);
+            console.log("Chart value:", bar.dataset.value);
+            console.log("Event type:", event.type);
+            console.log("Mouse X:", event.clientX);
+            console.log("Mouse Y:", event.clientY);
+            console.log("Bubbling phase");
+        }
+    }, false);
+</script>
+
+</body>
+</html>
